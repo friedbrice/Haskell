@@ -11,4 +11,6 @@ cabal-dev
 cabal.sandbox.config
 cabal.config
 *.exe
+*.bin
+*.txt
 
