@@ -21,12 +21,14 @@ myInit :: T
 myInit = const [1..9]
 
 input :: String -> T
--- turns a starting sudoku into an array of possible completions
+-- turns a starting sudoku into a function of possible entries
 -- mark does the real work of parring down possible entries
 input s = foldr mark myInit $
   [(p,n) | (p,n) <- zip idx $ map read $ lines s >>= words, n>0]
-  -- [(p,n)] is an [(Int,Int),Int], by the way
+  -- "[(p,n) | ...]" is an [((Int,Int),Int)], by the way
   -- p stands for "position", n stands for "number"
+  -- "zip idx $ map read $ lines s >>= words" is an [((Int,Int),b)]
+  -- is turn your input array into a matrix (ie, function on idx)
 
 mark :: ((Int,Int),Int) -> T -> T
 mark (p@(i,j),n) s q@(x,y) =
