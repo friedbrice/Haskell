@@ -35,6 +35,7 @@ mark (p@(i,j),n) s q@(x,y) =
 -- p is shorthand for (i,j)
 -- q is shorthand for (x,y)
 -- that's all the @ keyword does
+-- why does mark have three argumetns?
   if p==q then [n] else
   if x==i || y==j || e x i && e y j then delete n $ s q else s q
   where e a b = div (a-1) 3==div (b-1) 3
