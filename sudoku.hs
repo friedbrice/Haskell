@@ -1,28 +1,28 @@
 -- modified from https://www.haskell.org/pipermail/haskell-cafe/2006-August/017309.html
 import Data.List (lines, unlines, words, unwords, delete)
--- we're using Data.List mostly for string manipulation
--- their usages are clear from their names and types
+-- We're using Data.List mostly for string manipulation.
+-- Their usages are clear from their names and types.
 import System.IO (getContents, putStr)
--- again, usage is clear from name and type
+-- Again, usage is clear from name and type.
 
 type T = (Int,Int) -> [Int]
--- a T is a function from indicies to a list of possible entries
--- intuitively, it's an array of possible ways to complete a sudoku
+-- A T is a function from indicies to a list of possible entries.
+-- Intuitively, it's an array of possible ways to complete a sudoku.
 
 idx :: [(Int,Int)]
--- global constant, list of indicies
--- a T has domain idx
+-- Global constant, list of indicies.
+-- idx is the domain of a T.
 idx = [(i,j) | i <- [1..9], j <- [1..9]]
 
 myInit :: T
--- global constant, initial value for foldr mark
--- myInit (i,j) = [1..9], no matter what i and j are
--- i.o.w., no information about what each entry might be
+-- Global constant, initial value for foldr mark.
+-- myInit (i,j) = [1..9], no matter what i and j are,
+-- i.o.w., no information about what each entry might be.
 myInit = const [1..9]
 
 input :: String -> T
--- turns a starting sudoku into a function of possible entries
--- mark does the real work of parring down possible entries
+-- Turns a starting sudoku into a function of possible entries.
+-- mark does the real work of parring down possible entries.
 input s = foldr mark myInit $
   [(p,n) | (p,n) <- zip idx $ map read $ lines s >>= words, n>0]
   -- "[(p,n) | ...]" is an [((Int,Int),Int)], by the way
@@ -30,10 +30,16 @@ input s = foldr mark myInit $
   -- "zip idx $ map read $ lines s >>= words" is an [((Int,Int),b)]
   -- is turn your input array into a matrix (ie, function on idx)
 
+sameBlock :: (Int,Int) -> (Int,Int) -> Bool
+-- Tells you if two positions are in the same 3 by 3 block.
+-- Used in mark.
+sameBlock (i,j) (x,y) = e x i && e y j
+  where e a b = div (a-1) 3 == div (b-1) 3
+
 mark :: ((Int,Int),Int) -> T -> T
--- takes data from our input sudoku (first arg)
--- and an intermediate/heuristic solution (second arg)
--- and returns a refinement of the given (return)
+-- Takes data from our input sudoku (first arg),
+-- and an intermediate/heuristic solution (second arg),
+-- and returns a refinement of the given (return).
 mark (p@(i,j),n) s q@(x,y) =
 -- p is shorthand for (i,j)
 -- q is shorthand for (x,y)
@@ -42,11 +48,8 @@ mark (p@(i,j),n) s q@(x,y) =
 -- we define it's return for a representative arg, q
   if p==q then [n] else
   -- if position p is already filled in, leave it alone
-  if x==i || y==j || e x i && e y j then delete n $ s q else s q
-  where e a b = div (a-1) 3 == div (b-1) 3
+  if x==i || y==j || sameBlock p q then delete n . s $ q else s q
   -- if we already have n in a conflicting position, n can't be in q
-  -- e :: Integral a => a -> a -> Bool
-  -- e determines if a and b are in the same block
 
 solve :: [T] -> [T]
 solve s = foldr search s idx where
