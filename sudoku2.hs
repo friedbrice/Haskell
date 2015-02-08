@@ -1,4 +1,5 @@
 -- modified from https://www.haskell.org/pipermail/haskell-cafe/2006-August/017309.html
+-- modified to solve 6 by 6 sudoku in 2-row by 3-col blocks
 import Data.List (lines, unlines, words, unwords, delete)
 -- we're using Data.List mostly for string manipulation.
 -- their usages are clear from their names and types.
@@ -12,13 +13,13 @@ type T = (Int,Int) -> [Int]
 idx :: [(Int,Int)]
 -- global constant, list of indicies.
 -- a T has domain idx.
-idx = [(i,j) | i <- [1..9], j <- [1..9]]
+idx = [(i,j) | i <- [1..6], j <- [1..6]]
 
 myInit :: T
 -- global constant, initial value for foldr mark.
 -- myInit (i,j) = [1..9], no matter what i and j are,
 -- i.o.w., no information about what each entry might be.
-myInit = const [1..9]
+myInit = const [1..6]
 
 input :: String -> T
 -- turns a starting sudoku into a function of possible entries.
@@ -31,10 +32,10 @@ input s = foldr mark myInit $
   -- represents your input array as ordered pairs on domain idx.
 
 sameBlock :: (Int,Int) -> (Int,Int) -> Bool
--- tells you if two positions are in the same 3 by 3 block,
+-- tells you if two positions are in the same 2 by 3 block,
 -- used in mark.
-sameBlock (i,j) (x,y) = e x i && e y j
-  where e a b = div (a-1) 3 == div (b-1) 3
+sameBlock (i,j) (x,y) =
+  div (x-1) 2 == div (i-1) 2 && div (y-1) 3 == div (j-1) 3
 
 mark :: ((Int,Int),Int) -> T -> T
 -- takes data from our input sudoku (first arg),
@@ -68,7 +69,7 @@ solve s = foldr search s idx
 -- it seems redundant that both input and solve call mark.
 
 disp :: T -> String
-disp s  = unlines [unwords [show $ head $ s (i,j) | j <- [1..9]] | i <- [1..9]]
+disp s  = unlines [unwords [show $ head $ s (i,j) | j <- [1..6]] | i <- [1..6]]
 
 main :: IO ()
 main = do
