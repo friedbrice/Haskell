@@ -31,14 +31,22 @@ input s = foldr mark myInit $
   -- is turn your input array into a matrix (ie, function on idx)
 
 mark :: ((Int,Int),Int) -> T -> T
+-- takes data from our input sudoku (first arg)
+-- and an intermediate/heuristic solution (second arg)
+-- and returns a refinement of the given (return)
 mark (p@(i,j),n) s q@(x,y) =
 -- p is shorthand for (i,j)
 -- q is shorthand for (x,y)
 -- that's all the @ keyword does
--- why does mark have three argumetns?
+-- 'mark (p,n) s' is a function
+-- we define it's return for a representative arg, q
   if p==q then [n] else
+  -- if position p is already filled in, leave it alone
   if x==i || y==j || e x i && e y j then delete n $ s q else s q
-  where e a b = div (a-1) 3==div (b-1) 3
+  where e a b = div (a-1) 3 == div (b-1) 3
+  -- if we already have n in a conflicting position, n can't be in q
+  -- e :: Integral a => a -> a -> Bool
+  -- e determines if a and b are in the same block
 
 solve :: [T] -> [T]
 solve s = foldr search s idx where
