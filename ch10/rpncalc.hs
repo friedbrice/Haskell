@@ -31,7 +31,7 @@ solveRPN = head . foldl f [] . words where
 
 main :: IO ()
 main = do
-	putStrLn "rpncalc: a console reverse Polish notation calculator."
-	putStrLn "Type an expression in RPN and hit enter to evaluate."
+	putStrLn "rpncalc: a reverse-Polish-notation calculator for the console."
+	putStrLn "Type an expression in RPN and press enter to evaluate."
 	putStrLn "Press [ctrl] + [d] to exit."
 	interact $ unlines . map (show . solveRPN) . lines
