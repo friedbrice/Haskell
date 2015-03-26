@@ -10,5 +10,5 @@ routing ((aRt, aTm), (bRt, bTm)) (a,b,c) = ((aRt', aTm'), (bRt', bTm')) where
 
 route :: [Step] -> Route
 route steps | (snd . fst $ routes) <= (snd . snd $ routes) = fst routes
-	        | otherwise                                    = snd routes
+            | otherwise                                    = snd routes
 	where routes = foldl routing (("",0),("",0)) steps
