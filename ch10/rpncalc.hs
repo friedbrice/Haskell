@@ -36,5 +36,5 @@ startMessage =
     ++ "Press [ctrl] + [d] to exit.\n"
 
 main :: IO ()
-main = putStr startMessage
-    >> (interact $ unlines . map (show . solveRPN) . lines)
+main = putStr startMessage >>
+    (interact $ unlines . map (show . solveRPN) . lines)
