@@ -35,7 +35,7 @@ startMessage =
     "rpncalc: a reverse-Polish-notation calculator for the console.\n"
     ++ "Type an expression in RPN and press enter to evaluate.\n"
     ++ "\"-\" denotes negation. Use \"--\" for subtraction.\n"
-    ++ "Press [ctrl] + [d] to exit.\n"
+    ++ "Press [ctrl] + [c] to exit.\n"
 
 main :: IO ()
 main = putStr startMessage >>
