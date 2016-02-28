@@ -16,7 +16,7 @@ idx = [(i,j) | i <- [1..9], j <- [1..9]]
 
 myInit :: T
 -- global constant, initial value for foldr mark.
--- myInit (i,j) = [1..9], no matter what i and j are,
+-- myInit is [1..9] no matter what i and j are,
 -- i.o.w., no information about what each entry might be.
 myInit = const [1..9]
 
@@ -24,7 +24,7 @@ input :: String -> T
 -- turns a starting sudoku into a function of possible entries.
 -- mark does the real work of parring down possible entries.
 input s = foldr mark myInit $
-  [(p,n) | (p,n) <- zip idx $ map read $ lines s >>= words, n>0]
+  [(p,n) | (p,n) <- zip idx $ map read $ lines s >>= words, n > 0]
   -- [(p,n) | ...] :: [((Int,Int),Int)]
   -- p stands for "position", n stands for "number".
   -- zip idx $ map read $ lines s >>= words :: [((Int,Int),Int)]
@@ -74,4 +74,3 @@ main :: IO ()
 main = do
   s <- getContents
   putStr . unlines . map disp . solve $ [input s]
-
